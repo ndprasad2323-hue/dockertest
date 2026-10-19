@@ -3,67 +3,137 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Food App</title>
+  <title>Foodie Delight</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-    header { background: #ff7043; color: white; padding: 15px; text-align: center; }
-    nav { background: #333; padding: 10px; }
-    nav a { color: white; margin: 0 15px; text-decoration: none; }
-    .menu { display: flex; flex-wrap: wrap; padding: 20px; }
-    .item { border: 1px solid #ddd; margin: 10px; padding: 15px; width: 200px; text-align: center; }
-    .item img { width: 100%; height: auto; }
-    footer { background: #333; color: white; text-align: center; padding: 15px; margin-top: 20px; }
-    form { margin: 20px; }
-    input, textarea { width: 100%; padding: 10px; margin: 5px 0; }
-    button { background: #ff7043; color: white; padding: 10px; border: none; cursor: pointer; }
+    body { margin:0; font-family:'Segoe UI',sans-serif; background:#fff; }
+    header { position:sticky; top:0; background:#ff7043; color:white; display:flex; justify-content:space-between; align-items:center; padding:10px 20px; z-index:1000; }
+    header h1 { margin:0; font-size:1.5em; }
+    .nav-icons i { margin:0 10px; cursor:pointer; }
+    .hero { position:relative; background:url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat; height:300px; display:flex; flex-direction:column; justify-content:center; align-items:center; color:white; text-shadow:2px 2px 5px rgba(0,0,0,0.5); }
+    .hero::after { content:""; position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.4); }
+    .hero h2, .search-bar { position:relative; z-index:1; }
+    .search-bar { display:flex; margin-top:15px; }
+    .search-bar input { padding:10px; border:none; border-radius:5px 0 0 5px; width:250px; }
+    .search-bar button { padding:10px 20px; border:none; background:#ff7043; color:white; border-radius:0 5px 5px 0; cursor:pointer; }
+    .categories { display:flex; overflow-x:auto; padding:15px; gap:10px; background:#fff; }
+    .categories button { flex:0 0 auto; padding:10px 20px; border:none; border-radius:20px; background:#eee; cursor:pointer; }
+    .categories button.active { background:#ff7043; color:white; }
+    .menu { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; padding:20px; }
+    .item { background:white; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.1); overflow:hidden; transition:transform 0.3s; }
+    .item:hover { transform:translateY(-5px); }
+    .item img { width:100%; height:180px; object-fit:cover; }
+    .item h3 { margin:10px; color:#ff7043; }
+    .item .price { margin:0 10px; font-weight:bold; }
+    .stars { margin:5px 10px; color:gold; }
+    .item button { margin:10px; padding:10px; background:#ff7043; color:white; border:none; border-radius:5px; cursor:pointer; width:calc(100% - 20px); }
+    .cart { padding:20px; background:#f9f9f9; }
+    .cart h2 { color:#ff7043; }
+    .cart ul { list-style:none; padding:0; }
+    .cart li { margin:10px 0; padding:10px; background:#fff; border-radius:5px; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
+    .cart-icon { position:fixed; bottom:80px; right:20px; background:#ff7043; color:white; padding:15px; border-radius:50%; font-size:1.5em; cursor:pointer; box-shadow:0 4px 8px rgba(0,0,0,0.2); }
+    .order-btn { position:fixed; bottom:20px; right:20px; background:#ff7043; color:white; padding:15px 25px; border-radius:50px; font-size:1.2em; cursor:pointer; animation:pulse 1.5s infinite; }
+    @keyframes pulse { 0%{transform:scale(1);} 50%{transform:scale(1.1);} 100%{transform:scale(1);} }
+    footer { background:#333; color:white; text-align:center; padding:20px; margin-top:40px; }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>🍔 My Food App</h1>
-    <p>Delicious meals at your fingertips</p>
+    <h1>🍴 Foodie Delight</h1>
+    <div class="nav-icons">
+      <i class="fas fa-user"></i>
+      <i class="fas fa-shopping-cart" id="cartCount">0</i>
+    </div>
   </header>
 
-  <nav>
-    <a href="#menu">Menu</a>
-    <a href="#contact">Contact</a>
-  </nav>
+  <section class="hero">
+    <h2>Order your favorite food now!</h2>
+    <div class="search-bar">
+      <input type="text" placeholder="Search for dishes...">
+      <button>Search</button>
+    </div>
+  </section>
+
+  <div class="categories">
+    <button class="active">All</button>
+    <button>Pizza</button>
+    <button>Burgers</button>
+    <button>Salads</button>
+    <button>Drinks</button>
+  </div>
 
   <section id="menu" class="menu">
+    <!-- Pizza -->
     <div class="item">
-      <img src="https://via.placeholder.com/200" alt="Pizza">
+      <img src="https://images.unsplash.com/photo-1594007654729-407eedc4be65?auto=format&fit=crop&w=800&q=80" alt="Pizza">
       <h3>Pizza</h3>
-      <p>Cheesy and delicious</p>
-      <p>₹299</p>
+      <div class="stars">⭐⭐⭐⭐☆</div>
+      <p class="price">₹299</p>
+      <button onclick="addToCart('Pizza',299)">Add to Cart</button>
     </div>
+    <!-- Burger -->
     <div class="item">
-      <img src="https://via.placeholder.com/200" alt="Burger">
+      <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80" alt="Burger">
       <h3>Burger</h3>
-      <p>Juicy and filling</p>
-      <p>₹199</p>
+      <div class="stars">⭐⭐⭐⭐⭐</div>
+      <p class="price">₹199</p>
+      <button onclick="addToCart('Burger',199)">Add to Cart</button>
     </div>
+    <!-- Salad -->
     <div class="item">
-      <img src="https://via.placeholder.com/200" alt="Pasta">
-      <h3>Pasta</h3>
-      <p>Rich and creamy</p>
-      <p>₹249</p>
+      <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80" alt="Salad">
+      <h3>Salad</h3>
+      <div class="stars">⭐⭐⭐⭐☆</div>
+      <p class="price">₹149</p>
+      <button onclick="addToCart('Salad',149)">Add to Cart</button>
+    </div>
+    <!-- Drinks -->
+    <div class="item">
+      <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80" alt="Drinks">
+      <h3>Drinks</h3>
+      <div class="stars">⭐⭐⭐⭐☆</div>
+      <p class="price">₹99</p>
+      <button onclick="addToCart('Drinks',99)">Add to Cart</button>
     </div>
   </section>
 
-  <section id="contact">
-    <h2>Contact Us</h2>
-    <form>
-      <input type="text" placeholder="Your Name" required>
-      <input type="email" placeholder="Your Email" required>
-      <textarea placeholder="Your Message" rows="4" required></textarea>
-      <button type="submit">Send</button>
-    </form>
+  <section id="cart" class="cart">
+    <h2>Your Cart</h2>
+    <ul id="cartItems"></ul>
+    <p id="totalPrice">Total: ₹0</p>
   </section>
+
+  <div class="cart-icon">
+    <i class="fas fa-shopping-cart"></i>
+  </div>
+
+  <div class="order-btn">Order Now</div>
 
   <footer>
-    <p>&copy; 2026 My Food App. All rights reserved.</p>
+    <p>&copy; 2026 Foodie Delight. All rights reserved.</p>
   </footer>
+
+  <script>
+    let cart = [];
+    function addToCart(item, price) {
+      cart.push({item, price});
+      updateCart();
+    }
+    function updateCart() {
+      const cartList = document.getElementById('cartItems');
+      cartList.innerHTML = '';
+      let total = 0;
+      cart.forEach(c => {
+        const li = document.createElement('li');
+        li.textContent = `${c.item} - ₹${c.price}`;
+        cartList.appendChild(li);
+        total += c.price;
+      });
+      document.getElementById('totalPrice').textContent = 'Total: ₹' + total;
+      document.getElementById('cartCount').textContent = cart.length;
+    }
+  </script>
 
 </body>
 </html>
